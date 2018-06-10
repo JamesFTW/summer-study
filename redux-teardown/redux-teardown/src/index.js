@@ -72,11 +72,45 @@ const reducer = (state = initialState, action) => {
   }
 }
 
+const actions = [
+  {type: CREATE_NOTE},
+  {type: UPDATE_NOTE, id: 1, content: 'sup'}
+]
+
+const state = actions.reduce(reducer, undefined)
+
+const validateAction = action => {
+  if(!action || typeof action !== 'object' || Array.isArray(action)) {
+    throw new Error('Action must be an object')
+  }
+  if(typeof action.type === 'undefined') {
+    throw new Error('Action must have type')
+  }
+}
+
+const createStore = (reducer) => {
+  let state = undefined
+
+  return {
+    dispatch: (action) => {
+      validateAction(action)
+      state = reducer(state, action)
+    },
+    getState: () => state
+  }
+}
+
+const store = createStore(reducer)
+
+store.dispatch({
+  type: CREATE_NOTE
+})
+store.getState()
+
 const renderApp = () => {
   ReactDOM.render(
     <NoteApp notes={window.state.notes}/>,
     document.getElementById('root')
   )
 }
-
 renderApp()
