@@ -89,28 +89,61 @@ const validateAction = action => {
 }
 
 const createStore = (reducer) => {
-  let state = undefined
+  let state;
+  const subscribers = []
 
-  return {
+  const store = {
+    //dispatches an action to subscribers array
     dispatch: (action) => {
       validateAction(action)
       state = reducer(state, action)
+      subscribers.forEach(handler => handler())
     },
-    getState: () => state
+    //returns state
+    getState: () => state,
+    //pushes dom element to subscribers array
+    subscribe: handler => {
+      subscribers.push(handler)
+      return () => {
+        const index = subscribers.indexOf(handler)
+
+        if(index > 0) {
+          subscribers.splice(index, 1)
+        }
+      }
+    }
   }
+  store.dispatch({type: '@@redux/INIT'})
+  return store
 }
 
 const store = createStore(reducer)
 
-store.dispatch({
-  type: CREATE_NOTE
-})
-store.getState()
-
-const renderApp = () => {
+store.subscribe(() => {
   ReactDOM.render(
-    <NoteApp notes={window.state.notes}/>,
+    <pre>{JSON.stringify(store.getState(), null, 2)}</pre>,
     document.getElementById('root')
   )
-}
-renderApp()
+})
+
+store.dispatch({
+  type: CREATE_NOTE
+});
+
+store.dispatch({
+  type: UPDATE_NOTE,
+  id: 1,
+  content: 'Hello, world!'
+});
+store.dispatch({
+  type: UPDATE_NOTE,
+  id: 2,
+  content: 'James'
+});
+// const renderApp = () => {
+//   ReactDOM.render(
+//     <NoteApp notes={window.state.notes}/>,
+//     document.getElementById('root')
+//   )
+// }
+// renderApp()
