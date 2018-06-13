@@ -113,3 +113,31 @@ store.dispatch({
 //   )
 // }
 // renderApp()
+
+/*** Components ***/
+const NoteEditor = ({note, onChangeNote, onCloseNote}) => (
+  <div>
+    <div>
+      <textarea
+        className="editor-content"
+        autoFocus
+        value={note.content}
+        onChange={event => onChangeNote(note.id, event.target.value)}
+        rows={10} cols={80}
+      />
+    </div>
+    <button className="editor-content" onClick={onCloseNote}>Close</button>
+  </div>
+)
+const NoteApp = ({notes}) => (
+  <div>
+    <ul className="note-list">
+      {
+        Object.keys(notes).map(id => (
+          <li className="note-list-item" key={id}>{id}</li>
+        ))
+      }
+    </ul>
+    {/* <button className="editor-button" onClick={onAddNote}>New Note</button> */}
+  </div>
+)
