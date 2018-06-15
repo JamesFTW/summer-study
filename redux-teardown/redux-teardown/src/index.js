@@ -129,6 +129,17 @@ const NoteEditor = ({note, onChangeNote, onCloseNote}) => (
     <button className="editor-content" onClick={onCloseNote}>Close</button>
   </div>
 )
+
+const NoteTitle = ({note}) => {
+  const title = note.content.split('\n').replace(/^\s+|\s+$/g, '')
+
+  if(title === '') {
+    return <i>Untitled</i>
+  }
+
+  return <span>{title}</span>
+}
+
 const NoteApp = ({notes}) => (
   <div>
     <ul className="note-list">
