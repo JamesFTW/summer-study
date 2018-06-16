@@ -140,6 +140,14 @@ const NoteTitle = ({note}) => {
   return <span>{title}</span>
 }
 
+const NoteLink = ({note, onOpenNote}) => {
+  <li className="note-list-item">
+    <a href="#" onClick={() => onOpenNote(note.id)}>
+      <NoteTitle note={note}/>
+    </a>
+  </li>
+}
+
 const NoteApp = ({notes}) => (
   <div>
     <ul className="note-list">
