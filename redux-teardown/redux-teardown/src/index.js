@@ -24,12 +24,28 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         nextNoteId: id + 1,
+        openNoteId: id,
         notes: {
           ...state.notes,
           [id]: newnote
         }
       }
     }
+
+    case OPEN_NOTE: {
+      return {
+        ...state,
+        openNoteId: action.id
+      }
+    }
+
+    case CLOSE_NOTE: {
+      return {
+        ...state,
+        openNoteId: null
+      }
+    }
+
     case UPDATE_NOTE: {
       const {id, content} = action
       const editedNote = {
