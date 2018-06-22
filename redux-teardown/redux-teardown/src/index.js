@@ -15,6 +15,7 @@ const initialState = {
 
 const reducer = (state = initialState, action) => {
   switch(action.type) {
+
     case CREATE_NOTE: {
       const id = state.nextNoteId
       const newnote = {
@@ -147,7 +148,7 @@ const NoteEditor = ({note, onChangeNote, onCloseNote}) => (
 )
 
 const NoteTitle = ({note}) => {
-  const title = note.content.split('\n').replace(/^\s+|\s+$/g, '')
+  const title = note.content.split('\n')[0].replace(/^\s+|\s+$/g, '')
 
   if(title === '') {
     return <i>Untitled</i>
@@ -156,15 +157,15 @@ const NoteTitle = ({note}) => {
   return <span>{title}</span>
 }
 
-const NoteLink = ({note, onOpenNote}) => {
+const NoteLink = ({note, onOpenNote}) => (
   <li className="note-list-item">
     <a href="#" onClick={() => onOpenNote(note.id)}>
       <NoteTitle note={note}/>
     </a>
   </li>
-}
+)
 
-const NoteList = ({notes, onOpenNote}) => {
+const NoteList = ({notes, onOpenNote}) => (
   <ul className="note-list">
     {
       Object.keys(notes).map(id =>
