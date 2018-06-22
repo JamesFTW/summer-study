@@ -160,17 +160,83 @@ const NoteList = ({notes, onOpenNote}) => {
       )
     }
   </ul>
+)
+const NoteApp = ({
+  notes, openNoteId, onAddNote, onChangeNote, onOpenNote, onCloseNote
+}) => (
+  <div>
+    {
+      openNoteId ?
+      <NoteEditor
+        note={notes[openNoteId]} onChangeNote={onChangeNote}
+        onCloseNote={onCloseNote}
+      /> :
+      <div>
+        <NoteList notes={notes} onOpenNote={onOpenNote}/>
+        <button className="editor-button" onClick={onAddNote}>New Note</button>
+      </div>
+    }
+  </div>
+)
+
+
+class NoteAppContainer extends React.Component {
+  constructor(props) {
+    super()
+    //this.state values are stored props
+    this.state = props.store.getState()
+    this.onAddNote = this.onAddNote.bind(this)
+    this.onChangeNote = this.onChangeNote.bind(this)
+    this.onOpenNote = this.onOpenNote.bind(this)
+    this.onCloseNote = this.onCloseNote.bind(this)
+  }
+
+  componentWillMount() {
+    this.unsubscribe = this.props.store.subscribe(() =>
+      this.setState(this.props.store.getState())
+    )
+  }
+  componentWillUnmount() {
+    this.unsubscribe()
+  }
+  onAddNote() {
+    this.props.store.dispatch({
+      type: CREATE_NOTE
+    })
+  }
+  onChangeNote(id, content) {
+    this.props.store.dispatch({
+      type: UPDATE_NOTE,
+      id,
+      content
+    })
+  }
+  onOpenNote(id) {
+    this.props.store.dispatch({
+      type: OPEN_NOTE,
+      id
+    })
+  }
+  onCloseNote() {
+    this.props.store.dispatch({
+      type: CLOSE_NOTE
+    })
+  }
+
+  render() {
+    return (
+      <NoteApp
+        {...this.state}
+        onAddNote={this.onAddNote}
+        onChangeNote={this.onChangeNote}
+        onOpenNote={this.onOpenNote}
+        onCloseNote={this.onCloseNote}
+      />
+    )
+  }
 }
 
-const NoteApp = ({notes}) => (
-  <div>
-    <ul className="note-list">
-      {
-        Object.keys(notes).map(id => (
-          <li className="note-list-item" key={id}>{id}</li>
-        ))
-      }
-    </ul>
-    {/* <button className="editor-button" onClick={onAddNote}>New Note</button> */}
-  </div>
+ReactDOM.render(
+  <NoteAppContainer store={store}/>,
+  document.getElementById('root')
 )
