@@ -105,22 +105,22 @@ const createStore = (reducer) => {
 
 const store = createStore(reducer)
 
-store.subscribe(() => {
-  ReactDOM.render(
-    <pre>{JSON.stringify(store.getState(), null, 2)}</pre>,
-    document.getElementById('root')
-  )
-})
+// store.subscribe(() => {
+//   ReactDOM.render(
+//     <pre>{JSON.stringify(store.getState(), null, 2)}</pre>,
+//     document.getElementById('root')
+//   )
+// })
 
-store.dispatch({
-  type: CREATE_NOTE
-});
-
-store.dispatch({
-  type: UPDATE_NOTE,
-  id: 1,
-  content: 'Hello, world!'
-});
+// store.dispatch({
+//   type: CREATE_NOTE
+// });
+//
+// store.dispatch({
+//   type: UPDATE_NOTE,
+//   id: 1,
+//   content: 'Hello, world!'
+// });
 
 // const renderApp = () => {
 //   ReactDOM.render(
